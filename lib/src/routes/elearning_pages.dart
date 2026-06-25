@@ -2,20 +2,22 @@ import 'package:get/get.dart';
 
 import '../routes/elearning_routes.dart';
 import '../screens/unified_course_screen.dart';
+import '../screens/explore_courses_screen.dart';
+import '../screens/my_courses_screen.dart';
 import '../screens/course_details_screen.dart';
 import '../screens/course_checkout_screen.dart';
 import '../screens/course_index_details_screen.dart';
 import '../screens/merge_course_index_screen.dart';
 import '../screens/rating_review_screen.dart';
 import '../screens/write_review_screen.dart';
-import '../controllers/explore_courses_controller.dart';
-import '../controllers/my_courses_controller.dart';
+import '../controllers/unified_course_controller.dart';
 import '../controllers/course_details_controller.dart';
 import '../controllers/course_checkout_controller.dart';
 import '../controllers/course_index_details_controller.dart';
 import '../controllers/merge_course_index_controller.dart';
 import '../controllers/rating_review_controller.dart';
 import '../controllers/write_review_controller.dart';
+import '../config/elearning_enums.dart';
 
 class ElearningPages {
   ElearningPages._();
@@ -25,15 +27,22 @@ class ElearningPages {
       // Explore Courses Screen
       GetPage(
         name: ElearningRoutes.exploreCourseScreen,
-        page: () => const UnifiedCourseScreen(),
-        binding: ExploreCoursesBinding(),
+        page: () => const ExploreCoursesScreen(),
+        binding: UnifiedCourseBinding(mode: CourseMode.explore),
       ),
 
       // My Courses Screen
       GetPage(
         name: ElearningRoutes.myCoursesScreen,
+        page: () => const MyCoursesScreen(),
+        binding: UnifiedCourseBinding(mode: CourseMode.myCourses),
+      ),
+
+      // Unified Course Screen (generic/dashboard use)
+      GetPage(
+        name: ElearningRoutes.unifiedCourseScreen,
         page: () => const UnifiedCourseScreen(),
-        binding: MyCoursesBinding(),
+        binding: UnifiedCourseBinding(mode: CourseMode.dashboard),
       ),
 
       // Course Details Screen

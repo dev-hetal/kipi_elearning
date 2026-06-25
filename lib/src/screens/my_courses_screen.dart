@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/unified_course_controller.dart';
+import '../controllers/my_courses_controller.dart';
 import '../config/elearning_config.dart';
 
-class UnifiedCourseScreen extends GetView<UnifiedCourseController> {
-  const UnifiedCourseScreen({super.key});
+class MyCoursesScreen extends GetView<MyCoursesController> {
+  const MyCoursesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(controller.title),
+        title: const Text('My Courses'),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(56),
           child: Padding(
@@ -19,7 +19,7 @@ class UnifiedCourseScreen extends GetView<UnifiedCourseController> {
             child: TextField(
               onChanged: controller.onSearchChanged,
               decoration: const InputDecoration(
-                hintText: 'Search courses...',
+                hintText: 'Search my courses...',
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(),
                 filled: true,
@@ -42,7 +42,7 @@ class UnifiedCourseScreen extends GetView<UnifiedCourseController> {
                 Text(controller.errorMessage.value),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: controller.fetchCourses,
+                  onPressed: controller.fetchEnrolledCourses,
                   child: const Text('Retry'),
                 ),
               ],
@@ -51,7 +51,7 @@ class UnifiedCourseScreen extends GetView<UnifiedCourseController> {
         }
 
         if (controller.courses.isEmpty) {
-          return const Center(child: Text('No courses found'));
+          return const Center(child: Text('No enrolled courses found'));
         }
 
         return ListView.builder(
@@ -71,10 +71,6 @@ class UnifiedCourseScreen extends GetView<UnifiedCourseController> {
                   : const Icon(Icons.book, size: 40),
               title: Text(course.title ?? 'No Title'),
               subtitle: Text(course.subTitle ?? ''),
-              trailing: Text(
-                course.price != null ? '${course.price}' : 'Free',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
               onTap: () {
                 KipiElearning.navigationProvider.pushNamed(
                   route: '/course-details-screen',
