@@ -14,6 +14,23 @@ A reusable Flutter package for e-learning course management, enrollment, and con
 - **Dependency Injection**: Clean architecture with provider interfaces
 - **GetX Integration**: Built with GetX for state management and routing
 
+## Development Setup
+
+After cloning the repo, run this **once** to activate the Git hooks:
+
+```sh
+sh setup-hooks.sh
+```
+
+This enables a pre-commit hook that automatically runs `dart format` on your staged Dart files before every commit. If any file gets reformatted, the commit is aborted so you can review the changes, re-stage, and commit again:
+
+```sh
+git add .
+git commit   # try again after reviewing formatted files
+```
+
+> The CI pipeline enforces the same format check — fixing it locally saves a round-trip to GitHub Actions.
+
 ## Installation
 
 Add this package to your `pubspec.yaml`:
