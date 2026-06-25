@@ -1,83 +1,154 @@
-import 'package:get/get.dart';
+import "dart:async";
 
-import '../config/elearning_config.dart';
-import '../models/get_all_courses_model.dart';
+import "package:flutter/material.dart";
+import "package:get/get.dart";
+import "package:kipi_elearning/kipi_elearning.dart";
+
+import "../models/get_all_courses_model.dart";
+import "../models/user_has_course_model.dart";
 
 class MergeCourseIndexController extends GetxController {
-  // Reactive state
-  final Rx<AllCoursesRecordList?> rxCourse = Rx<AllCoursesRecordList?>(null);
   final RxList<dynamic> rxDataList = <dynamic>[].obs;
-  final RxBool isLoading = false.obs;
-  final RxString errorMessage = ''.obs;
+  final RxBool isLoading = true.obs;
+  final RxSet<String> rxSelectedIds = <String>{}.obs;
 
-  // Selection state
-  final RxSet<String> selectedIndices = <String>{}.obs;
+  Rx<AllCoursesRecordList>? rxCourse = AllCoursesRecordList().obs;
+  RxList<UserHasCourseData> rxUserHasCourseList = <UserHasCourseData>[].obs;
+  Rx<UserHasCourseData> rxEnrolledCourse = UserHasCourseData().obs;
+
+  RxList<dynamic> teacherIndexDataList = <dynamic>[].obs;
 
   @override
   void onInit() {
-    super.onInit();
-    _initializeFromArguments();
-    fetchCourseIndex();
-  }
-
-  void _initializeFromArguments() {
     if (Get.arguments != null && Get.arguments is Map<String, dynamic>) {
-      final args = Get.arguments;
-      if (args.containsKey('course')) {
-        rxCourse.value = AllCoursesRecordList.fromJson(args['course']);
+      final Map<String, dynamic> arguments = Get.arguments;
+      if (arguments.containsKey("course")) {
+        rxCourse?.value = AllCoursesRecordList.fromJson(arguments["course"]);
       }
     }
+
+    getCourseIndexData();
+    getUserHasCourse();
+    getTeacherIndexData();
+    super.onInit();
   }
 
-  Future<void> fetchCourseIndex() async {
-    if (rxCourse.value?.id == null) return;
+  Future<bool> getCourseIndexData() async {
+    isLoading.value = true;
+    final Completer<bool> completer = Completer<bool>();
 
     try {
-      isLoading.value = true;
-      errorMessage.value = '';
-
-      final indexData = await KipiElearning.courseRepository.getCourseIndex(
-        courseId: rxCourse.value!.id!,
+      final indexData = await KipiElearning.indexProvider.getCourseIndex(
+        courseId: rxCourse?.value.id ?? "",
         query: {},
       );
+      rxDataList.assignAll(indexData is List ? indexData : [indexData]);
+      
+      // Auto-select all chapters, topics, and subtopics
+      selectAllIndexes();
 
-      if (indexData != null) {
-        rxDataList.assignAll(indexData is List ? indexData : [indexData]);
-      }
-    } catch (e) {
-      errorMessage.value = e.toString();
-    } finally {
       isLoading.value = false;
+      completer.complete(true);
+    } catch (e) {
+      isLoading.value = false;
+      completer.completeError(e);
     }
+
+    return completer.future;
   }
 
-  bool isSelected(dynamic module) {
-    final id = module['id']?.toString();
-    return id != null && selectedIndices.contains(id);
-  }
-
-  void toggleSelection(dynamic module) {
-    final id = module['id']?.toString();
-    if (id != null) {
-      if (selectedIndices.contains(id)) {
-        selectedIndices.remove(id);
-      } else {
-        selectedIndices.add(id);
-      }
-    }
-  }
-
-  Future<void> mergeIndex() async {
-    if (rxCourse.value?.id == null || selectedIndices.isEmpty) return;
+  Future<bool> getTeacherIndexData() async {
+    isLoading.value = true;
+    final Completer<bool> completer = Completer<bool>();
 
     try {
-      isLoading.value = true;
-      errorMessage.value = '';
+      final indexData = await KipiElearning.indexProvider.getCourseIndex(
+        courseId: rxCourse?.value.subjectId ?? "",
+        query: {
+          "userId": KipiElearning.userProvider.userId,
+          "type": "private",
+        },
+      );
+      teacherIndexDataList.assignAll(indexData is List ? indexData : [indexData]);
+      isLoading.value = false;
+      completer.complete(true);
+    } catch (e) {
+      isLoading.value = false;
+      completer.completeError(e);
+    }
 
+    return completer.future;
+  }
+
+  Future<bool> getUserHasCourse() async {
+    final Completer<bool> completer = Completer<bool>();
+
+    try {
+      final enrollments = await KipiElearning.courseRepository.getUserHasCourse(
+        query: {"userId": KipiElearning.userProvider.userId},
+      );
+      rxUserHasCourseList.assignAll(enrollments);
+      rxEnrolledCourse.value = rxUserHasCourseList.firstWhereOrNull(
+            (e) => e.courseId == rxCourse?.value.id,
+          ) ??
+          UserHasCourseData();
+      completer.complete(true);
+    } catch (e) {
+      completer.completeError(e);
+    }
+
+    return completer.future;
+  }
+
+  bool isSelected(dynamic node) {
+    final id = node['id']?.toString();
+    return id != null && rxSelectedIds.contains(id);
+  }
+
+  void toggleSelection(dynamic node) {
+    final id = node['id']?.toString();
+    if (id != null) {
+      if (rxSelectedIds.contains(id)) {
+        rxSelectedIds.remove(id);
+      } else {
+        rxSelectedIds.add(id);
+      }
+    }
+    rxSelectedIds.refresh();
+  }
+
+  void selectAllIndexes() {
+    rxSelectedIds.clear();
+    for (final data in rxDataList) {
+      _collectIdsRecursively(data);
+    }
+  }
+
+  void _collectIdsRecursively(dynamic node) {
+    final id = node['id']?.toString();
+    if (id != null) {
+      rxSelectedIds.add(id);
+    }
+    final children = node['list'];
+    if (children != null && children is List) {
+      for (final child in children) {
+        _collectIdsRecursively(child);
+      }
+    }
+  }
+
+  List<String> get selectedIds => rxSelectedIds.toList();
+
+  Future<void> mergeIndex() async {
+    isLoading.value = true;
+
+    try {
       final body = {
-        'courseId': rxCourse.value!.id,
-        'selectedIndices': selectedIndices.toList(),
-        'userId': KipiElearning.userProvider.userId,
+        "title": rxCourse?.value.title ?? "",
+        "subject": rxCourse?.value.subjectId ?? "",
+        "type": "private",
+        "userId": KipiElearning.userProvider.userId,
+        "chapterIndex": selectedIds,
       };
 
       final success = await KipiElearning.indexProvider.mergeCourseIndex(
@@ -85,14 +156,12 @@ class MergeCourseIndexController extends GetxController {
       );
 
       if (success) {
-        // Navigate back with success
+        isLoading.value = false;
         KipiElearning.navigationProvider.pop();
       } else {
-        errorMessage.value = 'Merge failed';
+        isLoading.value = false;
       }
     } catch (e) {
-      errorMessage.value = e.toString();
-    } finally {
       isLoading.value = false;
     }
   }

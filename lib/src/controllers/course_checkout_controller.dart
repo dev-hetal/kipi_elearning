@@ -1,80 +1,77 @@
-import 'package:get/get.dart';
+import "dart:async";
 
-import '../config/elearning_config.dart';
-import '../models/get_all_courses_model.dart';
+import "package:get/get.dart";
+import "package:kipi_elearning/kipi_elearning.dart";
+
+import "../models/get_all_courses_model.dart";
+import "../models/user_has_course_model.dart";
 
 class CourseCheckoutController extends GetxController {
-
-  // Reactive state
-  final Rx<AllCoursesRecordList?> rxCourse = Rx<AllCoursesRecordList?>(null);
-  final RxBool isLoading = false.obs;
-  final RxString errorMessage = ''.obs;
-  final RxBool isProcessing = false.obs;
-
-  // Wallet balance
-  final Rx<num> walletBalance = 0.obs;
-  final RxBool hasSufficientBalance = false.obs;
+  Rx<AllCoursesRecordList>? rxCourse = AllCoursesRecordList().obs;
+  RxList<UserHasCourseData> rxUserHasCourseList = <UserHasCourseData>[].obs;
+  Rx<UserHasCourseData> rxEnrolledCourse = UserHasCourseData().obs;
+  final RxBool isLoading = true.obs;
 
   @override
   void onInit() {
-    super.onInit();
-    _initializeFromArguments();
-    fetchWalletBalance();
-  }
-
-  void _initializeFromArguments() {
     if (Get.arguments != null && Get.arguments is Map<String, dynamic>) {
-      final args = Get.arguments;
-      if (args.containsKey('course')) {
-        rxCourse.value = AllCoursesRecordList.fromJson(args['course']);
+      final Map<String, dynamic> arguments = Get.arguments;
+      if (arguments.containsKey("course") && arguments["course"] != null) {
+        rxCourse?.value = AllCoursesRecordList.fromJson(arguments["course"]);
       }
     }
+
+    getUserHasCourse();
+    super.onInit();
   }
 
-  Future<void> fetchWalletBalance() async {
+  Future<bool> enrollCourse() async {
+    if (rxCourse?.value.id == null) return false;
+    
     try {
-      // Mock wallet balance - in real implementation, use wallet provider
-      walletBalance.value = 1000;
-
-      if (rxCourse.value?.price != null) {
-        hasSufficientBalance.value = 1000 >= rxCourse.value!.price!;
-      }
-    } catch (e) {
-      errorMessage.value = e.toString();
-    }
-  }
-
-  Future<void> enrollInCourse() async {
-    if (rxCourse.value?.id == null) return;
-
-    try {
-      isProcessing.value = true;
-      errorMessage.value = '';
-
       final body = {
         'userId': KipiElearning.userProvider.userId,
-        'courseId': rxCourse.value!.id,
-        'instituteId': rxCourse.value!.instituteId,
-        'price': rxCourse.value!.price,
+        'courseId': rxCourse?.value.id,
+        'instituteId': rxCourse?.value.instituteId,
+        'price': rxCourse?.value.price,
       };
 
-      // Use course repository for enrollment
       final success = await KipiElearning.courseRepository.enrollCourse(
-        courseId: rxCourse.value!.id!,
+        courseId: rxCourse?.value.id ?? "",
         body: body,
       );
-
+      
       if (success) {
-        // Navigate back or show success
-        KipiElearning.navigationProvider.pop();
-      } else {
-        errorMessage.value = 'Enrollment failed';
+        await getUserHasCourse();
       }
+      
+      return success;
     } catch (e) {
-      errorMessage.value = e.toString();
-    } finally {
-      isProcessing.value = false;
+      return false;
     }
+  }
+
+  Future<bool> getUserHasCourse() async {
+    isLoading.value = true;
+    final Completer<bool> completer = Completer<bool>();
+
+    try {
+      final enrollments = await KipiElearning.courseRepository.getUserHasCourse(
+        query: {"userId": KipiElearning.userProvider.userId},
+      );
+      rxUserHasCourseList.assignAll(enrollments);
+      rxEnrolledCourse.value = rxUserHasCourseList.firstWhereOrNull(
+            (e) => e.courseId == rxCourse?.value.id,
+          ) ??
+          UserHasCourseData();
+      isLoading.value = false;
+      completer.complete(true);
+    } catch (e) {
+      isLoading.value = false;
+      completer.completeError(e);
+    }
+
+    return completer.future;
   }
 }
 

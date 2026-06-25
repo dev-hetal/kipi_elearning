@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
+import "package:kipi_elearning/kipi_elearning.dart";
 
-import '../config/elearning_config.dart';
-import '../models/get_all_courses_model.dart';
+import "../models/get_all_courses_model.dart";
 
 enum CourseCardType {
   listing,
@@ -30,9 +30,7 @@ class CourseDetailCard extends StatelessWidget {
       onTap: onTap,
       child: Card(
         elevation: 0,
-        margin: cardType == CourseCardType.listing
-            ? const EdgeInsets.only(bottom: 16)
-            : EdgeInsets.zero,
+        margin: cardType == CourseCardType.listing ? const EdgeInsets.only(bottom: 16) : EdgeInsets.zero,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         color: Theme.of(context).scaffoldBackgroundColor,
         shape: RoundedRectangleBorder(
@@ -41,15 +39,12 @@ class CourseDetailCard extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Thumbnail
+          children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.vertical(
-                top: Radius.circular(cardType == CourseCardType.listing ? 14 : 11),
-              ),
+                  top: Radius.circular(cardType == CourseCardType.listing ? 14 : 11)),
               child: _buildThumbnail(),
             ),
-            // Content
             if (cardType == CourseCardType.listing)
               Padding(
                 padding: const EdgeInsets.all(14),
@@ -69,7 +64,7 @@ class CourseDetailCard extends StatelessWidget {
   }
 
   Widget _buildThumbnail() {
-    final imageUrl = course.courseThumbNail?.presignedUrl ?? '';
+    final imageUrl = course.courseThumbNail?.presignedUrl ?? "";
     if (imageUrl.isNotEmpty) {
       return Image.network(
         imageUrl,
@@ -81,6 +76,14 @@ class CourseDetailCard extends StatelessWidget {
             height: cardType == CourseCardType.listing ? 160 : 140,
             color: Colors.grey.shade200,
             child: const Icon(Icons.image, size: 50, color: Colors.grey),
+          );
+        },
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Container(
+            height: cardType == CourseCardType.listing ? 160 : 140,
+            color: Colors.grey.shade200,
+            child: const Center(child: CircularProgressIndicator()),
           );
         },
       );
@@ -95,20 +98,20 @@ class CourseDetailCard extends StatelessWidget {
   Widget _buildCardContent(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (cardType == CourseCardType.listing) ...[
+      children: <Widget>[
+        if (cardType == CourseCardType.listing) ...<Widget>[
           Text(
-            course.courseStatus ?? '',
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+            course.courseStatus ?? "",
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black87),
           ),
           const SizedBox(height: 6),
           Text(
-            course.title ?? '',
+            course.title ?? "",
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
-        ] else ...[
+        ] else ...<Widget>[
           Text(
-            course.title ?? '',
+            course.title ?? "",
             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -116,34 +119,31 @@ class CourseDetailCard extends StatelessWidget {
         ],
         const SizedBox(height: 4),
         Text(
-          course.subTitle ?? '',
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+          course.subTitle ?? "",
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.black87),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
-        if (cardType == CourseCardType.listing)
-          const SizedBox(height: 12)
-        else
-          const Spacer(),
+        if (cardType == CourseCardType.listing) const SizedBox(height: 12) else const Spacer(),
         Row(
-          children: [
-            if (expiryDate != null) ...[
+          children: <Widget>[
+            if (expiryDate != null) ...<Widget>[
               const Icon(Icons.access_time, size: 16),
               const SizedBox(width: 4),
               Text(
-                'Expires on $expiryDate',
+                "Expires on $expiryDate",
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: KipiElearning.theme.getPrimaryColor(context),
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
-            ] else ...[
+            ] else ...<Widget>[
               const Icon(Icons.monetization_on, size: 16),
               const SizedBox(width: 4),
               Text(
-                course.price?.toString() ?? '',
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                course.price?.toString() ?? "",
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black87),
               ),
             ],
             const Spacer(),
@@ -155,7 +155,7 @@ class CourseDetailCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: const Text(
-                  'ENROLLED',
+                  "ENROLLED",
                   style: TextStyle(color: Colors.white, fontSize: 10),
                 ),
               ),

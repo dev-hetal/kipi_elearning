@@ -10,9 +10,7 @@ class CourseIndexDetailsScreen extends GetView<CourseIndexDetailsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Obx(() => Text(controller.rxTitle.value.isNotEmpty
-            ? controller.rxTitle.value
-            : 'Content Details')),
+        title: Obx(() => Text(controller.rxTitle.value.isNotEmpty ? controller.rxTitle.value : 'Content Details')),
       ),
       body: Obx(() {
         return Column(
@@ -63,7 +61,7 @@ class CourseIndexDetailsScreen extends GetView<CourseIndexDetailsController> {
               subtitle: Text(controller.getFileTypeLabel(file)),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                // Handle file tap - would need file preview integration
+                //TODO: Handle file tap - would need file preview integration
               },
             ),
           );

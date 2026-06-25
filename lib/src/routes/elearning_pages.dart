@@ -1,21 +1,22 @@
 import 'package:get/get.dart';
+import 'package:kipi_elearning/src/controllers/unified_course_controller.dart';
 
+import '../controllers/course_checkout_controller.dart';
+import '../controllers/course_details_controller.dart';
+import '../controllers/course_index_details_controller.dart';
+import '../controllers/explore_courses_controller.dart';
+import '../controllers/merge_course_index_controller.dart';
+import '../controllers/my_courses_controller.dart';
+import '../controllers/rating_review_controller.dart';
+import '../controllers/write_review_controller.dart';
 import '../routes/elearning_routes.dart';
-import '../screens/unified_course_screen.dart';
-import '../screens/course_details_screen.dart';
 import '../screens/course_checkout_screen.dart';
+import '../screens/course_details_screen.dart';
 import '../screens/course_index_details_screen.dart';
 import '../screens/merge_course_index_screen.dart';
 import '../screens/rating_review_screen.dart';
+import '../screens/unified_course_screen.dart';
 import '../screens/write_review_screen.dart';
-import '../controllers/explore_courses_controller.dart';
-import '../controllers/my_courses_controller.dart';
-import '../controllers/course_details_controller.dart';
-import '../controllers/course_checkout_controller.dart';
-import '../controllers/course_index_details_controller.dart';
-import '../controllers/merge_course_index_controller.dart';
-import '../controllers/rating_review_controller.dart';
-import '../controllers/write_review_controller.dart';
 
 class ElearningPages {
   ElearningPages._();
@@ -25,14 +26,20 @@ class ElearningPages {
       // Explore Courses Screen
       GetPage(
         name: ElearningRoutes.exploreCourseScreen,
-        page: () => const UnifiedCourseScreen(),
+        page: () => UnifiedCourseScreen(
+          controller: UnifiedCourseController(mode: CourseListMode.explore),
+          mode: CourseListMode.explore,
+        ),
         binding: ExploreCoursesBinding(),
       ),
 
       // My Courses Screen
       GetPage(
         name: ElearningRoutes.myCoursesScreen,
-        page: () => const UnifiedCourseScreen(),
+        page: () => UnifiedCourseScreen(
+          controller: UnifiedCourseController(mode: CourseListMode.myCourses),
+          mode: CourseListMode.myCourses,
+        ),
         binding: MyCoursesBinding(),
       ),
 
