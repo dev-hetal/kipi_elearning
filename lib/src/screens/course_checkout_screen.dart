@@ -228,7 +228,7 @@ class CourseCheckoutScreen extends GetView<CourseCheckoutController> {
           child: Text(
             controller.rxEnrolledCourse.value.id != null
                 ? "Purchased"
-                : controller.rxCourse?.value.price != null && controller.rxCourse.value?.price != 0
+                : controller.rxCourse.value?.price != null && controller.rxCourse.value?.price != 0
                     ? "Purchase Now"
                     : "Enroll Now",
             style: TextStyle(

@@ -5,7 +5,6 @@ import "package:flutter_spinkit/flutter_spinkit.dart";
 import "package:get/get.dart";
 import "package:kipi_elearning/kipi_elearning.dart";
 
-import "../controllers/unified_course_controller.dart";
 import "../widgets/course_detail_card.dart";
 
 class UnifiedCourseScreen extends StatelessWidget {

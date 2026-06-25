@@ -3,9 +3,6 @@ import "dart:async";
 import "package:get/get.dart";
 import "package:kipi_elearning/kipi_elearning.dart";
 
-import "../models/get_all_courses_model.dart";
-import "../models/user_has_course_model.dart";
-
 class CourseCheckoutController extends GetxController {
   // Reactive state
   final Rx<AllCoursesRecordList?> rxCourse = Rx<AllCoursesRecordList?>(null);
@@ -68,7 +65,7 @@ class CourseCheckoutController extends GetxController {
       );
       rxUserHasCourseList.assignAll(enrollments);
       rxEnrolledCourse.value = rxUserHasCourseList.firstWhereOrNull(
-            (e) => e.courseId == rxCourse.value?.id ?? "",
+            (e) => e.courseId == rxCourse.value?.id,
           ) ??
           UserHasCourseData();
       isLoading.value = false;

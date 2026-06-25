@@ -41,8 +41,7 @@ class CourseDetailCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             ClipRRect(
-              borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(cardType == CourseCardType.listing ? 14 : 11)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(cardType == CourseCardType.listing ? 14 : 11)),
               child: _buildThumbnail(),
             ),
             if (cardType == CourseCardType.listing)
