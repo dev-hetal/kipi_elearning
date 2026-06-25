@@ -48,7 +48,7 @@ class CourseCheckoutScreen extends GetView<CourseCheckoutController> {
 
   Widget buildView(BuildContext context) {
     return Obx(() {
-      final course = controller.rxCourse?.value;
+      final course = controller.rxCourse.value;
       final price = course?.price ?? 0;
 
       return SingleChildScrollView(

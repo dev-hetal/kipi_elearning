@@ -21,7 +21,7 @@ class CourseCheckoutController extends GetxController {
     if (Get.arguments != null && Get.arguments is Map<String, dynamic>) {
       final Map<String, dynamic> arguments = Get.arguments;
       if (arguments.containsKey("course") && arguments["course"] != null) {
-        rxCourse?.value = AllCoursesRecordList.fromJson(arguments["course"]);
+        rxCourse.value = AllCoursesRecordList.fromJson(arguments["course"]);
       }
     }
 

@@ -1,11 +1,7 @@
 import "dart:async";
 
-import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "package:kipi_elearning/kipi_elearning.dart";
-
-import "../models/get_all_courses_model.dart";
-import "../models/user_has_course_model.dart";
 
 class MergeCourseIndexController extends GetxController {
   final RxList<dynamic> rxDataList = <dynamic>[].obs;
@@ -38,12 +34,11 @@ class MergeCourseIndexController extends GetxController {
     final Completer<bool> completer = Completer<bool>();
 
     try {
-      final indexData = await KipiElearning.indexProvider.getCourseIndex(
-        courseId: rxCourse?.value.id ?? "",
-        query: {},
+      final indexData = await KipiElearning.indexProvider.getIndexBySubjectId(
+        query: {"courseId": rxCourse?.value.id ?? ""},
       );
       rxDataList.assignAll(indexData is List ? indexData : [indexData]);
-      
+
       // Auto-select all chapters, topics, and subtopics
       selectAllIndexes();
 
@@ -62,9 +57,9 @@ class MergeCourseIndexController extends GetxController {
     final Completer<bool> completer = Completer<bool>();
 
     try {
-      final indexData = await KipiElearning.indexProvider.getCourseIndex(
-        courseId: rxCourse?.value.subjectId ?? "",
+      final indexData = await KipiElearning.indexProvider.getIndexBySubjectId(
         query: {
+          "courseId": rxCourse?.value.subjectId ?? "",
           "userId": KipiElearning.userProvider.userId,
           "type": "private",
         },

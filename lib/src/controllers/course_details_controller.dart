@@ -3,9 +3,6 @@ import "dart:async";
 import "package:get/get.dart";
 import "package:kipi_elearning/kipi_elearning.dart";
 
-import "../models/get_all_courses_model.dart";
-import "../models/user_has_course_model.dart";
-
 class CourseDetailsController extends GetxController {
   final RxList<dynamic> rxDataList = <dynamic>[].obs;
   final RxBool isLoading = true.obs;
@@ -37,9 +34,8 @@ class CourseDetailsController extends GetxController {
     isLoading.value = true;
     final completer = Completer<bool>();
     try {
-      final indexData = await KipiElearning.indexProvider.getCourseIndex(
-        courseId: rxCourse?.value.id ?? "",
-        query: {},
+      final indexData = await KipiElearning.indexProvider.getIndexBySubjectId(
+        query: {"courseId": rxCourse?.value.id ?? ""},
       );
       rxDataList.assignAll(indexData is List ? indexData : [indexData]);
       isLoading.value = false;

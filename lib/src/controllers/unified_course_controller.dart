@@ -178,7 +178,7 @@ class UnifiedCourseController extends GetxController {
   }
 
   Future<List<AllCoursesRecordList>> _fetchExploreCourses(int pageKey) async {
-    final String role = KipiElearning.userProvider.userType ?? "";
+    final String role = KipiElearning.userProvider.userType;
     final query = {
       "userType": role,
       "page": pageKey,

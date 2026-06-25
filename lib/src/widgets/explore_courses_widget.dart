@@ -12,35 +12,22 @@ class ExploreCoursesWidget extends StatelessWidget {
     final controller = Get.find<ExploreCoursesController>();
 
     return Obx(() {
-      if (controller.isLoading.value) {
+      if (controller.rxIsLoading.value) {
         return const Center(child: CircularProgressIndicator());
       }
 
-      if (controller.errorMessage.value.isNotEmpty) {
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(controller.errorMessage.value),
-              ElevatedButton(
-                onPressed: controller.fetchCourses,
-                child: const Text('Retry'),
-              ),
-            ],
-          ),
-        );
-      }
+      final courses = [...controller.rxProfileRelatedCourses, ...controller.rxOtherCourses];
 
-      if (controller.courses.isEmpty) {
+      if (courses.isEmpty) {
         return const Center(child: Text('No courses available'));
       }
 
       return ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: controller.courses.length,
+        itemCount: courses.length,
         itemBuilder: (context, index) {
-          final course = controller.courses[index];
+          final course = courses[index];
           return CourseDetailCard(
             course: course,
             onTap: () {
