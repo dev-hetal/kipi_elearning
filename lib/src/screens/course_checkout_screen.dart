@@ -74,18 +74,16 @@ class CourseCheckoutScreen extends GetView<CourseCheckoutController> {
                 return SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: controller.hasSufficientBalance.value
-                        ? controller.enrollInCourse
-                        : controller.navigateToWallet,
+                    onPressed:
+                        // controller.hasSufficientBalance.value ?
+                        controller.enrollInCourse,
+
+                    // : controller.navigateToWallet,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: controller.hasSufficientBalance.value
-                          ? Colors.green
-                          : Colors.orange,
+                      backgroundColor: controller.hasSufficientBalance.value ? Colors.green : Colors.orange,
                     ),
                     child: Text(
-                      controller.hasSufficientBalance.value
-                          ? 'Enroll Now'
-                          : 'Add Credits',
+                      controller.hasSufficientBalance.value ? 'Enroll Now' : 'Add Credits',
                     ),
                   ),
                 );

@@ -183,12 +183,12 @@ class MockNavigationProvider implements NavigationProvider {
       List<String>? moduleCodeList,
       List<String>? featureCodeList,
       List<String>? actionCodeList}) {
-    return Get.toNamed<T>(route, arguments: arguments);
+    return Get.toNamed<T>(route, arguments: arguments) ?? Future.value();
   }
 
   @override
   Future<T?> newPushNamed<T>({required String route, Map<String, dynamic>? arguments}) {
-    return Get.offAllNamed<T>(route, arguments: arguments);
+    return Get.offAllNamed<T>(route, arguments: arguments) ?? Future.value();
   }
 
   @override

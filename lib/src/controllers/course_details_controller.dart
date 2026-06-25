@@ -1,10 +1,7 @@
 import 'package:get/get.dart';
-
-import '../config/elearning_config.dart';
-import '../models/get_all_courses_model.dart';
+import 'package:kipi_elearning/kipi_elearning.dart';
 
 class CourseDetailsController extends GetxController {
-
   // Reactive state
   final Rx<AllCoursesRecordList?> rxCourse = Rx<AllCoursesRecordList?>(null);
   final RxBool isLoading = false.obs;
@@ -13,6 +10,8 @@ class CourseDetailsController extends GetxController {
 
   // Course index data
   final RxList<dynamic> courseIndex = <dynamic>[].obs;
+
+  Rx<UserHasCourseData> rxEnrollment = UserHasCourseData().obs;
 
   @override
   void onInit() {
