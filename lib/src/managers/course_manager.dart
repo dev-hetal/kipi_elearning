@@ -5,8 +5,6 @@ import '../models/get_all_courses_model.dart';
 import '../models/user_has_course_model.dart';
 
 class CourseManager {
-  CourseManager._();
-
   static final CourseManager _instance = CourseManager._internal();
   factory CourseManager() => _instance;
   CourseManager._internal();

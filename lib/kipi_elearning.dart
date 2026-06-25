@@ -15,8 +15,6 @@ export 'src/providers/course_repository.dart';
 export 'src/providers/user_provider.dart';
 export 'src/providers/index_provider.dart';
 export 'src/providers/entity_provider.dart';
-export 'src/providers/subscription_provider.dart';
-export 'src/providers/wallet_provider.dart';
 export 'src/providers/navigation_provider.dart';
 
 // Managers

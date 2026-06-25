@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/course_index_details_controller.dart';
-import '../config/elearning_enums.dart';
 
 class CourseIndexDetailsScreen extends GetView<CourseIndexDetailsController> {
   const CourseIndexDetailsScreen({super.key});

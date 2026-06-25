@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../config/elearning_config.dart';
+
 class WriteReviewController extends GetxController {
   // Reactive state
   final RxInt rating = 0.obs;

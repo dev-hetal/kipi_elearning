@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/course_checkout_controller.dart';
-import '../config/elearning_config.dart';
-import '../utils/elearning_language.dart';
 
 class CourseCheckoutScreen extends GetView<CourseCheckoutController> {
   const CourseCheckoutScreen({super.key});

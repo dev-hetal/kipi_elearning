@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/merge_course_index_controller.dart';
-import '../config/elearning_config.dart';
 
 class MergeCourseIndexScreen extends GetView<MergeCourseIndexController> {
   const MergeCourseIndexScreen({super.key});

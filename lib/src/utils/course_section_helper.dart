@@ -1,5 +1,4 @@
 import '../models/get_all_courses_model.dart';
-import '../providers/entity_provider.dart';
 import '../config/elearning_config.dart';
 
 class CourseSectionHelper {

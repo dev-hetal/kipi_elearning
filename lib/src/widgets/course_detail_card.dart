@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../config/elearning_config.dart';
 import '../models/get_all_courses_model.dart';
-import '../models/user_has_course_model.dart';
 
 enum CourseCardType {
   listing,

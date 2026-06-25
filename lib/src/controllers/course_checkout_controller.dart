@@ -1,18 +1,12 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 
 import '../config/elearning_config.dart';
 import '../models/get_all_courses_model.dart';
-import '../models/user_has_course_model.dart';
-import '../managers/course_manager.dart';
 
 class CourseCheckoutController extends GetxController {
-  final CourseManager _courseManager = CourseManager();
 
   // Reactive state
   final Rx<AllCoursesRecordList?> rxCourse = Rx<AllCoursesRecordList?>(null);
-  final Rx<UserHasCourseData?> rxEnrollment = Rx<UserHasCourseData?>(null);
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
   final RxBool isProcessing = false.obs;
@@ -39,11 +33,11 @@ class CourseCheckoutController extends GetxController {
 
   Future<void> fetchWalletBalance() async {
     try {
-      final balance = await KipiElearning.walletProvider.getWalletBalance();
-      walletBalance.value = balance;
+      // Mock wallet balance - in real implementation, use wallet provider
+      walletBalance.value = 1000;
 
       if (rxCourse.value?.price != null) {
-        hasSufficientBalance.value = balance >= rxCourse.value!.price!;
+        hasSufficientBalance.value = 1000 >= rxCourse.value!.price!;
       }
     } catch (e) {
       errorMessage.value = e.toString();
@@ -64,10 +58,10 @@ class CourseCheckoutController extends GetxController {
         'price': rxCourse.value!.price,
       };
 
-      final success = await KipiElearning.walletProvider.enrollCourseWithWallet(
+      // Use course repository for enrollment
+      final success = await KipiElearning.courseRepository.enrollCourse(
         courseId: rxCourse.value!.id!,
-        amount: rxCourse.value!.price ?? 0,
-        additionalData: body,
+        body: body,
       );
 
       if (success) {
@@ -81,10 +75,6 @@ class CourseCheckoutController extends GetxController {
     } finally {
       isProcessing.value = false;
     }
-  }
-
-  Future<void> navigateToWallet() async {
-    await KipiElearning.walletProvider.navigateToWallet();
   }
 }
 

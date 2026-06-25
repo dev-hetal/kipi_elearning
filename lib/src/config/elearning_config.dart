@@ -2,9 +2,7 @@ import '../providers/course_repository.dart';
 import '../providers/entity_provider.dart';
 import '../providers/index_provider.dart';
 import '../providers/navigation_provider.dart';
-import '../providers/subscription_provider.dart';
 import '../providers/user_provider.dart';
-import '../providers/wallet_provider.dart';
 import 'elearning_theme.dart';
 
 class KipiElearning {
@@ -15,8 +13,6 @@ class KipiElearning {
   static late final UserProvider userProvider;
   static late final IndexProvider indexProvider;
   static late final EntityProvider entityProvider;
-  static late final SubscriptionProvider subscriptionProvider;
-  static late final WalletProvider walletProvider;
   static late final NavigationProvider navigationProvider;
 
   // Optional Configuration
@@ -41,8 +37,6 @@ class KipiElearning {
     KipiElearning.userProvider = userProvider;
     KipiElearning.indexProvider = indexProvider;
     KipiElearning.entityProvider = entityProvider;
-    KipiElearning.subscriptionProvider = subscriptionProvider;
-    KipiElearning.walletProvider = walletProvider;
     KipiElearning.navigationProvider = navigationProvider;
     KipiElearning.theme = theme ?? ElearningTheme();
     KipiElearning.translator = translator;
@@ -56,7 +50,5 @@ class KipiElearning {
       userProvider != null &&
       indexProvider != null &&
       entityProvider != null &&
-      subscriptionProvider != null &&
-      walletProvider != null &&
       navigationProvider != null;
 }

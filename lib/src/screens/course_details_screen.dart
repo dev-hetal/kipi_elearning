@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../controllers/course_details_controller.dart';
 import '../config/elearning_config.dart';
-import '../utils/elearning_language.dart';
 
 class CourseDetailsScreen extends GetView<CourseDetailsController> {
   const CourseDetailsScreen({super.key});

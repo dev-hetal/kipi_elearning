@@ -4,8 +4,6 @@ import 'package:get/get.dart';
 import '../controllers/explore_courses_controller.dart';
 import '../controllers/my_courses_controller.dart';
 import '../config/elearning_config.dart';
-import '../config/elearning_enums.dart';
-import '../utils/elearning_language.dart';
 
 class UnifiedCourseScreen extends StatelessWidget {
   const UnifiedCourseScreen({super.key});
@@ -24,22 +22,29 @@ class UnifiedCourseScreen extends StatelessWidget {
             : 'My Courses'),
       ),
       body: Obx(() {
-        if (controller.isLoading.value) {
+        if (controller is ExploreCoursesController && controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (controller is MyCoursesController && controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (controller.errorMessage.value.isNotEmpty) {
+        final errorMessage = controller is ExploreCoursesController
+            ? controller.errorMessage.value
+            : (controller as MyCoursesController).errorMessage.value;
+
+        if (errorMessage.isNotEmpty) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(controller.errorMessage.value),
+                Text(errorMessage),
                 ElevatedButton(
                   onPressed: () {
                     if (controller is ExploreCoursesController) {
                       controller.fetchCourses();
                     } else {
-                      controller.fetchEnrolledCourses();
+                      (controller as MyCoursesController).fetchEnrolledCourses();
                     }
                   },
                   child: const Text('Retry'),
@@ -49,14 +54,18 @@ class UnifiedCourseScreen extends StatelessWidget {
           );
         }
 
-        if (controller.courses.isEmpty) {
+        final courses = controller is ExploreCoursesController
+            ? controller.courses
+            : (controller as MyCoursesController).courses;
+
+        if (courses.isEmpty) {
           return const Center(child: Text('No courses found'));
         }
 
         return ListView.builder(
-          itemCount: controller.courses.length,
+          itemCount: courses.length,
           itemBuilder: (context, index) {
-            final course = controller.courses[index];
+            final course = courses[index];
             return ListTile(
               title: Text(course.title ?? 'No Title'),
               subtitle: Text(course.subTitle ?? ''),

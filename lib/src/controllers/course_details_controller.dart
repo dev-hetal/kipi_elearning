@@ -1,18 +1,12 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 
 import '../config/elearning_config.dart';
 import '../models/get_all_courses_model.dart';
-import '../models/user_has_course_model.dart';
-import '../managers/course_manager.dart';
 
 class CourseDetailsController extends GetxController {
-  final CourseManager _courseManager = CourseManager();
 
   // Reactive state
   final Rx<AllCoursesRecordList?> rxCourse = Rx<AllCoursesRecordList?>(null);
-  final Rx<UserHasCourseData?> rxEnrollment = Rx<UserHasCourseData?>(null);
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
   final RxBool isEnrolled = false.obs;

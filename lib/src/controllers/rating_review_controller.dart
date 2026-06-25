@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../config/elearning_config.dart';
+
 class ReviewModel {
   final String review;
   final String name;

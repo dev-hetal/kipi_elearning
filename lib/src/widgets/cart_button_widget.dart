@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../config/elearning_config.dart';
 
 class CartButtonWidget extends StatelessWidget {
   final int itemCount;

@@ -3,14 +3,11 @@ import 'package:get/get.dart';
 import '../config/elearning_config.dart';
 import '../config/elearning_enums.dart';
 import '../models/get_all_courses_model.dart';
-import '../models/user_has_course_model.dart';
-import '../managers/course_manager.dart';
 
 class ExploreCoursesController extends GetxController {
   ExploreCoursesController() : mode = CourseMode.explore;
 
   final CourseMode mode;
-  final CourseManager _courseManager = CourseManager();
 
   // Reactive state
   final RxList<AllCoursesRecordList> courses = <AllCoursesRecordList>[].obs;

@@ -18,8 +18,6 @@ void _initializePackage() {
     userProvider: MockUserProvider(),
     indexProvider: MockIndexProvider(),
     entityProvider: MockEntityProvider(),
-    subscriptionProvider: MockSubscriptionProvider(),
-    walletProvider: MockWalletProvider(),
     navigationProvider: MockNavigationProvider(),
   );
 }
@@ -177,54 +175,6 @@ class MockEntityProvider implements EntityProvider {
   }
 }
 
-class MockSubscriptionProvider implements SubscriptionProvider {
-  @override
-  Future<List<dynamic>> getInstPlan({required Map<String, dynamic> query}) async {
-    return [];
-  }
-
-  @override
-  bool hasActiveSubscription() {
-    return false;
-  }
-
-  @override
-  DateTime? getSubscriptionExpiry() {
-    return null;
-  }
-
-  @override
-  bool isCourseIncludedInSubscription({required String courseId}) {
-    return false;
-  }
-}
-
-class MockWalletProvider implements WalletProvider {
-  @override
-  Future<bool> enrollCourseWithWallet(
-      {required String courseId, required num amount, Map<String, dynamic>? additionalData}) async {
-    return true;
-  }
-
-  @override
-  Future<num> getWalletBalance() async {
-    return 1000;
-  }
-
-  @override
-  Future<bool> hasSufficientBalance({required num amount}) async {
-    return true;
-  }
-
-  @override
-  Future<void> navigateToWallet() async {}
-
-  @override
-  Future<bool> createWalletTransaction({required Map<String, dynamic> body}) async {
-    return true;
-  }
-}
-
 class MockNavigationProvider implements NavigationProvider {
   @override
   Future<T?> pushNamed<T>(
@@ -233,12 +183,12 @@ class MockNavigationProvider implements NavigationProvider {
       List<String>? moduleCodeList,
       List<String>? featureCodeList,
       List<String>? actionCodeList}) {
-    return Get.toNamed(route, arguments: arguments);
+    return Get.toNamed<T>(route, arguments: arguments);
   }
 
   @override
   Future<T?> newPushNamed<T>({required String route, Map<String, dynamic>? arguments}) {
-    return Get.offAllNamed(route, arguments: arguments);
+    return Get.offAllNamed<T>(route, arguments: arguments);
   }
 
   @override
