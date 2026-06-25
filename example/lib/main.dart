@@ -5,14 +5,14 @@ import 'package:kipi_elearning/kipi_elearning.dart';
 void main() {
   // Initialize mock providers for example
   _initializePackage();
-  
+
   runApp(const MyApp());
 }
 
 void _initializePackage() {
   // Mock implementations for demonstration
   // In real app, you would implement these interfaces with your actual data sources
-  
+
   KipiElearning.initialize(
     courseRepository: MockCourseRepository(),
     userProvider: MockUserProvider(),
@@ -201,7 +201,8 @@ class MockSubscriptionProvider implements SubscriptionProvider {
 
 class MockWalletProvider implements WalletProvider {
   @override
-  Future<bool> enrollCourseWithWallet({required String courseId, required num amount, Map<String, dynamic>? additionalData}) async {
+  Future<bool> enrollCourseWithWallet(
+      {required String courseId, required num amount, Map<String, dynamic>? additionalData}) async {
     return true;
   }
 
@@ -226,7 +227,12 @@ class MockWalletProvider implements WalletProvider {
 
 class MockNavigationProvider implements NavigationProvider {
   @override
-  Future<T?> pushNamed<T>({required String route, Map<String, dynamic>? arguments, List<String>? moduleCodeList, List<String>? featureCodeList, List<String>? actionCodeList}) {
+  Future<T?> pushNamed<T>(
+      {required String route,
+      Map<String, dynamic>? arguments,
+      List<String>? moduleCodeList,
+      List<String>? featureCodeList,
+      List<String>? actionCodeList}) {
     return Get.toNamed(route, arguments: arguments);
   }
 

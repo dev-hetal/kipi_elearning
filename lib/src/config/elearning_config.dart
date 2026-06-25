@@ -1,14 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import 'elearning_theme.dart';
 import '../providers/course_repository.dart';
-import '../providers/user_provider.dart';
-import '../providers/index_provider.dart';
 import '../providers/entity_provider.dart';
-import '../providers/subscription_provider.dart';
-import '../providers/wallet_provider.dart';
+import '../providers/index_provider.dart';
 import '../providers/navigation_provider.dart';
+import '../providers/subscription_provider.dart';
+import '../providers/user_provider.dart';
+import '../providers/wallet_provider.dart';
+import 'elearning_theme.dart';
 
 class KipiElearning {
   KipiElearning._();
@@ -34,8 +31,6 @@ class KipiElearning {
     required UserProvider userProvider,
     required IndexProvider indexProvider,
     required EntityProvider entityProvider,
-    required SubscriptionProvider subscriptionProvider,
-    required WalletProvider walletProvider,
     required NavigationProvider navigationProvider,
     ElearningTheme? theme,
     String Function(String)? translator,
