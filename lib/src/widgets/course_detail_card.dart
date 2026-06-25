@@ -45,7 +45,8 @@ class CourseDetailCard extends StatelessWidget {
             // Thumbnail
             ClipRRect(
               borderRadius: BorderRadius.vertical(
-                top: Radius.circular(cardType == CourseCardType.listing ? 14 : 11),
+                top: Radius.circular(
+                    cardType == CourseCardType.listing ? 14 : 11),
               ),
               child: _buildThumbnail(),
             ),
@@ -143,7 +144,8 @@ class CourseDetailCard extends StatelessWidget {
               const SizedBox(width: 4),
               Text(
                 course.price?.toString() ?? '',
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ],
             const Spacer(),

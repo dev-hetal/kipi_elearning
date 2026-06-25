@@ -76,8 +76,8 @@ class UnifiedCourseController extends GetxController {
       query['search'] = searchQuery.value;
     }
 
-    final fetchedEnrollments = await KipiElearning.courseRepository
-        .getUserHasCourse(query: query);
+    final fetchedEnrollments =
+        await KipiElearning.courseRepository.getUserHasCourse(query: query);
     enrolledCourses.assignAll(fetchedEnrollments);
 
     final courseIds = fetchedEnrollments

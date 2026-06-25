@@ -11,7 +11,8 @@ class CourseDetailsScreen extends GetView<CourseDetailsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Obx(() => Text(controller.rxCourse.value?.title ?? 'Course Details')),
+        title: Obx(
+            () => Text(controller.rxCourse.value?.title ?? 'Course Details')),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -41,7 +42,8 @@ class CourseDetailsScreen extends GetView<CourseDetailsController> {
               // Course title
               Text(
                 course.title ?? 'No Title',
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
 
@@ -56,7 +58,8 @@ class CourseDetailsScreen extends GetView<CourseDetailsController> {
               if (course.price != null)
                 Text(
                   'Price: ${course.price}',
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               const SizedBox(height: 16),
 
@@ -65,7 +68,8 @@ class CourseDetailsScreen extends GetView<CourseDetailsController> {
                 if (controller.isEnrolled.value) {
                   return const Text(
                     'Enrolled',
-                    style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.green, fontWeight: FontWeight.bold),
                   );
                 } else {
                   return ElevatedButton(

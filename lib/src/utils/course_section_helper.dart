@@ -11,7 +11,10 @@ class CourseSectionHelper {
     final standardEntities = entities.where((e) {
       final entityType = e['entityType'];
       if (entityType != null && entityType['title'] != null) {
-        return entityType['title'].toString().toLowerCase().contains('standard');
+        return entityType['title']
+            .toString()
+            .toLowerCase()
+            .contains('standard');
       }
       return false;
     }).toList();
@@ -26,7 +29,8 @@ class CourseSectionHelper {
 
     // Assign courses to corresponding standard based on matching entity IDs
     for (final course in courses) {
-      final courseEntityIds = (course.entities ?? []).map((e) => e.toString()).toSet();
+      final courseEntityIds =
+          (course.entities ?? []).map((e) => e.toString()).toSet();
       for (final entity in standardEntities) {
         final entityId = entity['id']?.toString();
         if (entityId != null && courseEntityIds.contains(entityId)) {
@@ -47,7 +51,8 @@ class CourseSectionHelper {
 
   /// Groups courses first by top-level entity (e.g., School, Play House) and then
   /// by the standard/subject within that entity.
-  static Map<String, Map<String, List<AllCoursesRecordList>>> groupCoursesByEntity(
+  static Map<String, Map<String, List<AllCoursesRecordList>>>
+      groupCoursesByEntity(
     List<AllCoursesRecordList> courses,
     List<dynamic> entities,
   ) {
@@ -55,7 +60,10 @@ class CourseSectionHelper {
     final standardEntities = entities.where((e) {
       final entityType = e['entityType'];
       if (entityType != null && entityType['title'] != null) {
-        return entityType['title'].toString().toLowerCase().contains('standard');
+        return entityType['title']
+            .toString()
+            .toLowerCase()
+            .contains('standard');
       }
       return false;
     }).toList();
@@ -63,7 +71,10 @@ class CourseSectionHelper {
     final topEntities = entities.where((e) {
       final entityType = e['entityType'];
       if (entityType != null && entityType['title'] != null) {
-        return !entityType['title'].toString().toLowerCase().contains('standard');
+        return !entityType['title']
+            .toString()
+            .toLowerCase()
+            .contains('standard');
       }
       return false;
     }).toList();
@@ -99,7 +110,8 @@ class CourseSectionHelper {
 
     // Assign courses to the appropriate bucket.
     for (final course in courses) {
-      final courseEntityIds = (course.entities ?? []).map((e) => e.toString()).toSet();
+      final courseEntityIds =
+          (course.entities ?? []).map((e) => e.toString()).toSet();
       // Find the first matching standard entity.
       dynamic matchedStandard;
       for (final se in standardEntities) {
@@ -122,12 +134,14 @@ class CourseSectionHelper {
     }
 
     // Remove empty entries to keep UI clean.
-    result.removeWhere((_, inner) => inner.values.every((list) => list.isEmpty));
+    result
+        .removeWhere((_, inner) => inner.values.every((list) => list.isEmpty));
     return result;
   }
 
   /// Group courses by subject hierarchy using EntityProvider
-  static Future<Map<String, Map<String, List<AllCoursesRecordList>>>> groupCoursesBySubjectHierarchy(
+  static Future<Map<String, Map<String, List<AllCoursesRecordList>>>>
+      groupCoursesBySubjectHierarchy(
     List<AllCoursesRecordList> courses,
     List<dynamic> entities,
   ) async {
@@ -141,7 +155,8 @@ class CourseSectionHelper {
 
       // Get subject entity and its ancestor chain using EntityProvider
       try {
-        final subjectEntity = await KipiElearning.entityProvider.getEntityFromSubjectId(
+        final subjectEntity =
+            await KipiElearning.entityProvider.getEntityFromSubjectId(
           subjectId: subjectId,
           entityType: 'SUBJECT',
         );
@@ -152,7 +167,8 @@ class CourseSectionHelper {
         }
 
         // Retrieve all parent entities (ancestors) for the subject
-        final ancestors = await KipiElearning.entityProvider.getParentsFromChild(
+        final ancestors =
+            await KipiElearning.entityProvider.getParentsFromChild(
           childId: subjectId,
         );
 
@@ -174,7 +190,10 @@ class CourseSectionHelper {
           if (standardTitle == null &&
               entityType != null &&
               entityType['title'] != null &&
-              entityType['title'].toString().toLowerCase().contains('standard')) {
+              entityType['title']
+                  .toString()
+                  .toLowerCase()
+                  .contains('standard')) {
             standardTitle = title;
           }
           // Stop when we reach the top institute entity
@@ -199,7 +218,8 @@ class CourseSectionHelper {
     }
 
     // Remove empty groups to keep UI clean
-    result.removeWhere((_, inner) => inner.values.every((list) => list.isEmpty));
+    result
+        .removeWhere((_, inner) => inner.values.every((list) => list.isEmpty));
     return result;
   }
 }

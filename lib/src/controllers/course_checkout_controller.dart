@@ -4,7 +4,6 @@ import '../config/elearning_config.dart';
 import '../models/get_all_courses_model.dart';
 
 class CourseCheckoutController extends GetxController {
-
   // Reactive state
   final Rx<AllCoursesRecordList?> rxCourse = Rx<AllCoursesRecordList?>(null);
   final RxBool isLoading = false.obs;

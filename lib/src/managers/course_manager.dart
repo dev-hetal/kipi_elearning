@@ -16,7 +16,8 @@ class CourseManager {
   final RxList<UserHasCourseData> enrolledCourses = <UserHasCourseData>[].obs;
 
   /// Reactive map of enrolled courses by course ID for quick lookup
-  final RxMap<String, UserHasCourseData> enrolledCourseMap = <String, UserHasCourseData>{}.obs;
+  final RxMap<String, UserHasCourseData> enrolledCourseMap =
+      <String, UserHasCourseData>{}.obs;
 
   /// Loading state
   final RxBool isLoading = false.obs;

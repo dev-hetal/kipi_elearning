@@ -26,7 +26,8 @@ class CourseCheckoutScreen extends GetView<CourseCheckoutController> {
               // Course info
               Text(
                 course.title ?? 'No Title',
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Text(
@@ -38,7 +39,8 @@ class CourseCheckoutScreen extends GetView<CourseCheckoutController> {
               // Price
               Text(
                 'Price: ${course.price ?? 0}',
-                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
 
@@ -76,10 +78,14 @@ class CourseCheckoutScreen extends GetView<CourseCheckoutController> {
                   child: ElevatedButton(
                     onPressed: controller.enrollInCourse,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: controller.hasSufficientBalance.value ? Colors.green : Colors.orange,
+                      backgroundColor: controller.hasSufficientBalance.value
+                          ? Colors.green
+                          : Colors.orange,
                     ),
                     child: Text(
-                      controller.hasSufficientBalance.value ? 'Enroll Now' : 'Add Credits',
+                      controller.hasSufficientBalance.value
+                          ? 'Enroll Now'
+                          : 'Add Credits',
                     ),
                   ),
                 );

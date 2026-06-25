@@ -76,29 +76,34 @@ class HomeScreen extends StatelessWidget {
 // Mock implementations for demonstration purposes
 class MockCourseRepository implements CourseRepository {
   @override
-  Future<List<AllCoursesRecordList>> getAllCourses({required Map<String, dynamic> query}) async {
+  Future<List<AllCoursesRecordList>> getAllCourses(
+      {required Map<String, dynamic> query}) async {
     await Future.delayed(const Duration(seconds: 1));
     return [];
   }
 
   @override
-  Future<List<UserHasCourseData>> getUserHasCourse({required Map<String, dynamic> query}) async {
+  Future<List<UserHasCourseData>> getUserHasCourse(
+      {required Map<String, dynamic> query}) async {
     await Future.delayed(const Duration(seconds: 1));
     return [];
   }
 
   @override
-  Future<AllCoursesRecordList?> getCourseById({required String courseId}) async {
+  Future<AllCoursesRecordList?> getCourseById(
+      {required String courseId}) async {
     return null;
   }
 
   @override
-  Future<bool> enrollCourse({required String courseId, required Map<String, dynamic> body}) async {
+  Future<bool> enrollCourse(
+      {required String courseId, required Map<String, dynamic> body}) async {
     return true;
   }
 
   @override
-  Future<dynamic> getCourseIndex({required String courseId, required Map<String, dynamic> query}) async {
+  Future<dynamic> getCourseIndex(
+      {required String courseId, required Map<String, dynamic> query}) async {
     return [];
   }
 }
@@ -124,7 +129,8 @@ class MockUserProvider implements UserProvider {
 
 class MockIndexProvider implements IndexProvider {
   @override
-  Future<dynamic> getIndexBySubjectId({required Map<String, dynamic> query}) async {
+  Future<dynamic> getIndexBySubjectId(
+      {required Map<String, dynamic> query}) async {
     return [];
   }
 
@@ -132,13 +138,16 @@ class MockIndexProvider implements IndexProvider {
   Future<void> createIndex({required Map<String, dynamic> body}) async {}
 
   @override
-  Future<void> updateIndex({required String id, required Map<String, dynamic> body}) async {}
+  Future<void> updateIndex(
+      {required String id, required Map<String, dynamic> body}) async {}
 
   @override
-  Future<void> assignChapterToUsers({required Map<String, dynamic> body}) async {}
+  Future<void> assignChapterToUsers(
+      {required Map<String, dynamic> body}) async {}
 
   @override
-  Future<dynamic> getAssignedChapters({required Map<String, dynamic> query}) async {
+  Future<dynamic> getAssignedChapters(
+      {required Map<String, dynamic> query}) async {
     return [];
   }
 
@@ -155,7 +164,8 @@ class MockEntityProvider implements EntityProvider {
   }
 
   @override
-  Future<dynamic> getEntityFromSubjectId({required String subjectId, required String entityType}) async {
+  Future<dynamic> getEntityFromSubjectId(
+      {required String subjectId, required String entityType}) async {
     return null;
   }
 
@@ -187,7 +197,8 @@ class MockNavigationProvider implements NavigationProvider {
   }
 
   @override
-  Future<T?> newPushNamed<T>({required String route, Map<String, dynamic>? arguments}) async {
+  Future<T?> newPushNamed<T>(
+      {required String route, Map<String, dynamic>? arguments}) async {
     return Get.offAllNamed<T>(route, arguments: arguments);
   }
 

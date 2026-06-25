@@ -43,7 +43,8 @@ class MyCoursesController extends GetxController {
         query['search'] = searchQuery.value;
       }
 
-      final fetchedEnrollments = await KipiElearning.courseRepository.getUserHasCourse(
+      final fetchedEnrollments =
+          await KipiElearning.courseRepository.getUserHasCourse(
         query: query,
       );
 
@@ -56,7 +57,8 @@ class MyCoursesController extends GetxController {
           .toList();
 
       if (courseIds.isNotEmpty) {
-        final fetchedCourses = await KipiElearning.courseRepository.getAllCourses(
+        final fetchedCourses =
+            await KipiElearning.courseRepository.getAllCourses(
           query: {
             'courseIds': courseIds.join(','),
           },

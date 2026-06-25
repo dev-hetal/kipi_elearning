@@ -30,7 +30,8 @@ class CourseIndexTreeView extends StatelessWidget {
   }
 
   Widget _buildModuleItem(dynamic module, int level) {
-    final hasChildren = module['list'] != null && (module['list'] as List).isNotEmpty;
+    final hasChildren =
+        module['list'] != null && (module['list'] as List).isNotEmpty;
     final selected = isSelected(module);
 
     return Padding(
@@ -49,9 +50,7 @@ class CourseIndexTreeView extends StatelessWidget {
                       )
                     : null,
                 title: Text(module['title']?.toString() ?? 'No Title'),
-                trailing: hasChildren
-                    ? const Icon(Icons.expand_more)
-                    : null,
+                trailing: hasChildren ? const Icon(Icons.expand_more) : null,
                 onTap: hasChildren ? () {} : null,
               ),
             )
@@ -64,13 +63,12 @@ class CourseIndexTreeView extends StatelessWidget {
                     )
                   : null,
               title: Text(module['title']?.toString() ?? 'No Title'),
-              trailing: hasChildren
-                  ? const Icon(Icons.expand_more)
-                  : null,
+              trailing: hasChildren ? const Icon(Icons.expand_more) : null,
               onTap: hasChildren ? () {} : null,
             ),
           if (hasChildren)
-            ...((module['list'] as List).map((child) => _buildModuleItem(child, level + 1))),
+            ...((module['list'] as List)
+                .map((child) => _buildModuleItem(child, level + 1))),
         ],
       ),
     );

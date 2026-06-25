@@ -148,8 +148,12 @@ class AllCoursesRecordList {
     createdBy = json["createdBy"];
     updatedBy = json["updatedBy"];
     deletedBy = json["deletedBy"];
-    courseThumbNail = json["courseThumbNail"] != null ? CourseThumbNail.fromJson(json["courseThumbNail"]) : null;
-    courseIntroVideo = json["courseIntroVideo"] != null ? CourseThumbNail.fromJson(json["courseIntroVideo"]) : null;
+    courseThumbNail = json["courseThumbNail"] != null
+        ? CourseThumbNail.fromJson(json["courseThumbNail"])
+        : null;
+    courseIntroVideo = json["courseIntroVideo"] != null
+        ? CourseThumbNail.fromJson(json["courseIntroVideo"])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
