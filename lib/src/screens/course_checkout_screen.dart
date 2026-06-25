@@ -74,11 +74,7 @@ class CourseCheckoutScreen extends GetView<CourseCheckoutController> {
                 return SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed:
-                        // controller.hasSufficientBalance.value ?
-                        controller.enrollInCourse,
-
-                    // : controller.navigateToWallet,
+                    onPressed: controller.enrollInCourse,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: controller.hasSufficientBalance.value ? Colors.green : Colors.orange,
                     ),

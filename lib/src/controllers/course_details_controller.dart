@@ -11,7 +11,7 @@ class CourseDetailsController extends GetxController {
   // Course index data
   final RxList<dynamic> courseIndex = <dynamic>[].obs;
 
-  Rx<UserHasCourseData> rxEnrollment = UserHasCourseData().obs;
+  final Rx<UserHasCourseData?> rxEnrollment = Rx<UserHasCourseData?>(null);
 
   @override
   void onInit() {
@@ -78,6 +78,7 @@ class CourseDetailsController extends GetxController {
         rxEnrollment.value = enrollments.first;
         isEnrolled.value = true;
       } else {
+        rxEnrollment.value = null;
         isEnrolled.value = false;
       }
     } catch (e) {

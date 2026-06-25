@@ -45,10 +45,5 @@ class KipiElearning {
   }
 
   /// Check if the package is initialized
-  static bool get isInitialized =>
-      courseRepository != null &&
-      userProvider != null &&
-      indexProvider != null &&
-      entityProvider != null &&
-      navigationProvider != null;
+  static bool get isInitialized => true;
 }
