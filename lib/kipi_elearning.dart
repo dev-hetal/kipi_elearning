@@ -17,6 +17,16 @@ export 'src/providers/index_provider.dart';
 export 'src/providers/entity_provider.dart';
 export 'src/providers/navigation_provider.dart';
 
+// Controllers
+export 'src/controllers/unified_course_controller.dart';
+export 'src/controllers/explore_courses_controller.dart';
+export 'src/controllers/my_courses_controller.dart';
+
+// Screens
+export 'src/screens/explore_courses_screen.dart';
+export 'src/screens/my_courses_screen.dart';
+export 'src/screens/unified_course_screen.dart';
+
 // Managers
 export 'src/managers/course_manager.dart';
 

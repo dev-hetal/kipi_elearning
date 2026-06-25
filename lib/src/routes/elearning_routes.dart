@@ -4,6 +4,7 @@ class ElearningRoutes {
   // Course Listing Routes
   static const String exploreCourseScreen = '/explore-course-screen';
   static const String myCoursesScreen = '/my-courses-screen';
+  static const String unifiedCourseScreen = '/unified-course-screen';
 
   // Course Detail Routes
   static const String courseDetailsScreen = '/course-details-screen';

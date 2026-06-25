@@ -60,9 +60,11 @@ class RatingReviewScreen extends GetView<RatingReviewController> {
                     Row(
                       children: List.generate(5, (i) {
                         if (i < review.rating) {
-                          return const Icon(Icons.star, color: Colors.amber, size: 20);
+                          return const Icon(Icons.star,
+                              color: Colors.amber, size: 20);
                         } else {
-                          return const Icon(Icons.star_border, color: Colors.amber, size: 20);
+                          return const Icon(Icons.star_border,
+                              color: Colors.amber, size: 20);
                         }
                       }),
                     ),

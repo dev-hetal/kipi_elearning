@@ -47,12 +47,16 @@ class ElearningTheme {
 
   /// Get text color with fallback to theme or default
   Color getTextColor(BuildContext context) {
-    return textColor ?? Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black87;
+    return textColor ??
+        Theme.of(context).textTheme.bodyLarge?.color ??
+        Colors.black87;
   }
 
   /// Get subtext color with fallback to theme or default
   Color getSubtextColor(BuildContext context) {
-    return subtextColor ?? Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black54;
+    return subtextColor ??
+        Theme.of(context).textTheme.bodyMedium?.color ??
+        Colors.black54;
   }
 
   /// Get border color with fallback to theme or default

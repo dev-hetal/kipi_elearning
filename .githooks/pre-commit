@@ -1,0 +1,34 @@
+#!/bin/sh
+#
+# Pre-commit hook: auto-formats staged Dart files with dart format.
+# If any files are reformatted, the commit is aborted so you can
+# review the changes and re-stage them before committing.
+#
+
+echo "🎨 Running dart format on staged Dart files..."
+
+# Collect staged .dart files (added, copied, modified — not deleted)
+STAGED_DART_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.dart$')
+
+if [ -z "$STAGED_DART_FILES" ]; then
+  echo "   No Dart files staged — skipping format check."
+  exit 0
+fi
+
+# Run dart format on only the staged files
+echo "$STAGED_DART_FILES" | xargs dart format --set-exit-if-changed 2>&1
+FORMAT_EXIT=$?
+
+if [ $FORMAT_EXIT -ne 0 ]; then
+  echo ""
+  echo "❌ dart format reformatted one or more files."
+  echo "   Please review the changes, re-stage them, and commit again:"
+  echo ""
+  echo "     git add ."
+  echo "     git commit"
+  echo ""
+  exit 1
+fi
+
+echo "✅ All staged Dart files are properly formatted."
+exit 0

@@ -5,7 +5,8 @@ import 'package:get/get.dart';
 
 import '../config/elearning_enums.dart';
 
-class CourseIndexDetailsController extends GetxController with GetTickerProviderStateMixin {
+class CourseIndexDetailsController extends GetxController
+    with GetTickerProviderStateMixin {
   final Rx<TabController?> tabController = (null as TabController?).obs;
 
   /// The index data passed from the course details screen
@@ -89,7 +90,9 @@ class CourseIndexDetailsController extends GetxController with GetTickerProvider
 
   /// Get a display name for the file
   String getFileName(dynamic file) {
-    return file['title']?.toString() ?? file['fileStorageDetails']?['originalFileName']?.toString() ?? '';
+    return file['title']?.toString() ??
+        file['fileStorageDetails']?['originalFileName']?.toString() ??
+        '';
   }
 
   /// Get file type label for display

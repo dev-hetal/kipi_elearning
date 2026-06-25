@@ -7,10 +7,17 @@ import "../models/get_all_courses_model.dart";
 import "../models/user_has_course_model.dart";
 
 class CourseCheckoutController extends GetxController {
-  Rx<AllCoursesRecordList>? rxCourse = AllCoursesRecordList().obs;
+  // Reactive state
+  final Rx<AllCoursesRecordList?> rxCourse = Rx<AllCoursesRecordList?>(null);
+  final RxBool isLoading = false.obs;
+  final RxString errorMessage = ''.obs;
+  final RxBool isProcessing = false.obs;
   RxList<UserHasCourseData> rxUserHasCourseList = <UserHasCourseData>[].obs;
   Rx<UserHasCourseData> rxEnrolledCourse = UserHasCourseData().obs;
-  final RxBool isLoading = true.obs;
+
+  // Wallet balance
+  final Rx<num> walletBalance = 0.obs;
+  final RxBool hasSufficientBalance = false.obs;
 
   @override
   void onInit() {
@@ -26,25 +33,25 @@ class CourseCheckoutController extends GetxController {
   }
 
   Future<bool> enrollCourse() async {
-    if (rxCourse?.value.id == null) return false;
-    
+    if (rxCourse.value?.id == null) return false;
+
     try {
       final body = {
         'userId': KipiElearning.userProvider.userId,
-        'courseId': rxCourse?.value.id,
-        'instituteId': rxCourse?.value.instituteId,
-        'price': rxCourse?.value.price,
+        'courseId': rxCourse.value?.id,
+        'instituteId': rxCourse.value?.instituteId,
+        'price': rxCourse.value?.price,
       };
 
       final success = await KipiElearning.courseRepository.enrollCourse(
-        courseId: rxCourse?.value.id ?? "",
+        courseId: rxCourse.value?.id ?? "",
         body: body,
       );
-      
+
       if (success) {
         await getUserHasCourse();
       }
-      
+
       return success;
     } catch (e) {
       return false;
@@ -61,7 +68,7 @@ class CourseCheckoutController extends GetxController {
       );
       rxUserHasCourseList.assignAll(enrollments);
       rxEnrolledCourse.value = rxUserHasCourseList.firstWhereOrNull(
-            (e) => e.courseId == rxCourse?.value.id,
+            (e) => e.courseId == rxCourse.value?.id ?? "",
           ) ??
           UserHasCourseData();
       isLoading.value = false;

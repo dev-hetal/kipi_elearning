@@ -1,0 +1,126 @@
+name: Flutter CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  format:
+    name: Dart Format Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Check formatting (root package)
+        run: dart format lib/ --set-exit-if-changed
+
+      - name: Check formatting (example app)
+        run: dart format example/lib/ --set-exit-if-changed
+
+  analyze:
+    name: Flutter Analyze
+    runs-on: ubuntu-latest
+    needs: format
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Install root package dependencies
+        run: flutter pub get
+
+      - name: Install example app dependencies
+        run: flutter pub get
+        working-directory: example
+
+      - name: Run Flutter Analyze (root package)
+        run: flutter analyze
+
+      - name: Run Flutter Analyze (example app)
+        run: flutter analyze
+        working-directory: example
+
+  build_web:
+    name: Build Web (Example App)
+    runs-on: ubuntu-latest
+    needs: analyze
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Install root package dependencies
+        run: flutter pub get
+
+      - name: Install example app dependencies
+        run: flutter pub get
+        working-directory: example
+
+      - name: Build web (release)
+        run: flutter build web --release
+        working-directory: example
+
+      - name: Upload web build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: example/build/web/
+          retention-days: 7
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: analyze
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests
+        run: flutter test --coverage
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
