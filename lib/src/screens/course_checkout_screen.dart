@@ -218,10 +218,18 @@ class CourseCheckoutScreen extends GetView<CourseCheckoutController> {
           onPressed: controller.rxEnrolledCourse.value.id != null
               ? null
               : () async {
+                  // Show loader if callback is available
+                  KipiElearning.showLoader?.call();
+                  
                   final bool isEnrolled = await controller.enrollCourse();
+                  
+                  // Hide loader if callback is available
+                  KipiElearning.hideLoader?.call();
+                  
                   if (!isEnrolled) {
                     showInsufficientCreditsSheet(context);
                   } else {
+                    KipiElearning.onSuccessMessage?.call("Course enrolled successfully");
                     KipiElearning.navigationProvider.pop();
                   }
                 },
@@ -293,8 +301,9 @@ class CourseCheckoutScreen extends GetView<CourseCheckoutController> {
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
                   onPressed: () async {
-                    // Navigate to wallet screen
-                    KipiElearning.navigationProvider.pop();
+                    // Navigate to wallet screen using wallet provider
+                    KipiElearning.walletProvider?.navigateToWallet();
+                    Navigator.pop(context);
                   },
                   child: const Text(
                     "Buy Credit",

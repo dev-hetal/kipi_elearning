@@ -16,6 +16,9 @@ class CourseCheckoutController extends GetxController {
   final Rx<num> walletBalance = 0.obs;
   final RxBool hasSufficientBalance = false.obs;
 
+  // Subscription status
+  final RxBool isCourseFreeInSubscription = false.obs;
+
   @override
   void onInit() {
     if (Get.arguments != null && Get.arguments is Map<String, dynamic>) {
@@ -25,25 +28,64 @@ class CourseCheckoutController extends GetxController {
       }
     }
 
-    getUserHasCourse();
+    _initializeData();
     super.onInit();
+  }
+
+  Future<void> _initializeData() async {
+    await getUserHasCourse();
+    await checkWalletBalance();
+    await checkSubscriptionStatus();
+  }
+
+  Future<void> checkWalletBalance() async {
+    if (KipiElearning.walletProvider == null) return;
+
+    try {
+      walletBalance.value = await KipiElearning.walletProvider!.getWalletBalance();
+      final coursePrice = rxCourse.value?.price ?? 0;
+      hasSufficientBalance.value = KipiElearning.walletProvider!.hasSufficientBalance(
+        coursePrice: coursePrice,
+        currentBalance: walletBalance.value,
+      );
+    } catch (e) {
+      hasSufficientBalance.value = false;
+    }
+  }
+
+  Future<void> checkSubscriptionStatus() async {
+    if (KipiElearning.subscriptionProvider == null || rxCourse.value?.id == null) return;
+
+    try {
+      isCourseFreeInSubscription.value = KipiElearning.subscriptionProvider!.isCourseIncludedInSubscription(
+        courseId: rxCourse.value?.id ?? "",
+      );
+    } catch (e) {
+      isCourseFreeInSubscription.value = false;
+    }
   }
 
   Future<bool> enrollCourse() async {
     if (rxCourse.value?.id == null) return false;
 
     try {
-      final body = {
-        'userId': KipiElearning.userProvider.userId,
-        'courseId': rxCourse.value?.id,
-        'instituteId': rxCourse.value?.instituteId,
-        'price': rxCourse.value?.price,
-      };
+      // Build enrollment body based on user type
+      final body = _buildEnrollmentBody();
 
-      final success = await KipiElearning.courseRepository.enrollCourse(
-        courseId: rxCourse.value?.id ?? "",
-        body: body,
-      );
+      bool success = false;
+
+      // Use wallet provider if available, otherwise use course repository
+      if (KipiElearning.walletProvider != null) {
+        success = await KipiElearning.walletProvider!.enrollCourseWithWallet(
+          courseId: rxCourse.value?.id ?? "",
+          body: body,
+        );
+      } else {
+        success = await KipiElearning.courseRepository.enrollCourse(
+          courseId: rxCourse.value?.id ?? "",
+          body: body,
+        );
+      }
 
       if (success) {
         await getUserHasCourse();
@@ -53,6 +95,39 @@ class CourseCheckoutController extends GetxController {
     } catch (e) {
       return false;
     }
+  }
+
+  Map<String, dynamic> _buildEnrollmentBody() {
+    final userType = KipiElearning.userProvider.userType;
+    final appType = KipiElearning.userProvider.appType;
+
+    final body = <String, dynamic>{
+      'userId': KipiElearning.userProvider.userId,
+      'userUuid': KipiElearning.userProvider.userUuid,
+      'courseId': rxCourse.value?.id,
+      'instituteId': rxCourse.value?.instituteId,
+      'price': rxCourse.value?.price,
+      'userType': userType,
+      'appType': appType,
+    };
+
+    // Add role-specific data
+    body['users'] = [
+      {
+        'userId': KipiElearning.userProvider.userId,
+        'uuid': KipiElearning.userProvider.userUuid,
+        'type': 'SELF',
+      }
+    ];
+    body['type'] = 'BUY';
+    body['itemType'] = 'COURSE';
+    body['item'] = {
+      'id': rxCourse.value?.id,
+      'uuid': rxCourse.value?.id,
+      'coin': rxCourse.value?.price ?? 0,
+    };
+
+    return body;
   }
 
   Future<bool> getUserHasCourse() async {

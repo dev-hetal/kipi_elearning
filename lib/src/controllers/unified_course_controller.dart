@@ -178,11 +178,18 @@ class UnifiedCourseController extends GetxController {
   }
 
   Future<List<AllCoursesRecordList>> _fetchExploreCourses(int pageKey) async {
-    final String role = KipiElearning.userProvider.userType;
-    final query = {
-      "userType": role,
+    final String userType = KipiElearning.userProvider.userType;
+    final String appType = KipiElearning.userProvider.appType;
+    
+    final query = <String, dynamic>{
+      "userType": userType,
+      "appType": appType,
       "page": pageKey,
+      "courseStatus": "publish",
+      "isIncludeIntroVideoData": true,
+      "isIncludeThumbNailData": true,
     };
+    
     if (rxSearch.value.isNotEmpty) {
       query["search"] = rxSearch.value;
     }
@@ -190,9 +197,9 @@ class UnifiedCourseController extends GetxController {
     final tempList = await KipiElearning.courseRepository.getAllCourses(query: query);
 
     List<String> userEntities = [];
-    if (role == "teacher") {
+    if (userType == "teacher") {
       userEntities = KipiElearning.userProvider.interestedEntities;
-    } else if (role == "instituteMasterAdmin" || role == "instituteAdmin") {
+    } else if (userType == "instituteMasterAdmin" || userType == "instituteAdmin") {
       userEntities = userInstituteMeta?.entities ?? <String>[];
     }
 
@@ -226,8 +233,11 @@ class UnifiedCourseController extends GetxController {
     final Completer<List<AllCoursesRecordList>> completer = Completer<List<AllCoursesRecordList>>();
     final query = <String, dynamic>{
       "userType": KipiElearning.userProvider.userType,
+      "appType": KipiElearning.userProvider.appType,
       "courseStatus": "publish",
       "page": pageKey,
+      "isIncludeIntroVideoData": true,
+      "isIncludeThumbNailData": true,
     };
     if (rxSearch.value.isNotEmpty) {
       query["search"] = rxSearch.value;

@@ -19,6 +19,10 @@ void _initializePackage() {
     indexProvider: MockIndexProvider(),
     entityProvider: MockEntityProvider(),
     navigationProvider: MockNavigationProvider(),
+    walletProvider: MockWalletProvider(),
+    subscriptionProvider: MockSubscriptionProvider(),
+    showLoader: () => print('Show loader'),
+    hideLoader: () => print('Hide loader'),
   );
 }
 
@@ -215,5 +219,66 @@ class MockNavigationProvider implements NavigationProvider {
   @override
   String? getCurrentRoute() {
     return Get.currentRoute;
+  }
+}
+
+class MockWalletProvider implements WalletProvider {
+  @override
+  Future<bool> enrollCourseWithWallet({
+    required String courseId,
+    required Map<String, dynamic> body,
+  }) async {
+    await Future.delayed(const Duration(seconds: 1));
+    return true;
+  }
+
+  @override
+  Future<num> getWalletBalance() async {
+    return 1000;
+  }
+
+  @override
+  bool hasSufficientBalance({
+    required num coursePrice,
+    required num currentBalance,
+  }) {
+    return currentBalance >= coursePrice;
+  }
+
+  @override
+  void navigateToWallet() {
+    print('Navigate to wallet screen');
+  }
+
+  @override
+  Future<bool> createWalletTransaction({
+    required Map<String, dynamic> body,
+  }) async {
+    await Future.delayed(const Duration(seconds: 1));
+    return true;
+  }
+}
+
+class MockSubscriptionProvider implements SubscriptionProvider {
+  @override
+  Future<List<dynamic>> getInstPlan() async {
+    return [];
+  }
+
+  @override
+  bool hasActiveSubscription() {
+    return true;
+  }
+
+  @override
+  String? getSubscriptionExpiry() {
+    return '2025-12-31';
+  }
+
+  @override
+  bool isCourseIncludedInSubscription({
+    required String courseId,
+  }) {
+    return false;
   }
 }
