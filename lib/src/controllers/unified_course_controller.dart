@@ -180,16 +180,16 @@ class UnifiedCourseController extends GetxController {
   Future<List<AllCoursesRecordList>> _fetchExploreCourses(int pageKey) async {
     final String userType = KipiElearning.userProvider.userType;
     final String appType = KipiElearning.userProvider.appType;
-    
+
     final query = <String, dynamic>{
       "userType": userType,
       "appType": appType,
       "page": pageKey,
-      "courseStatus": "publish",
+      "courseStatus": "PUBLISH",
       "isIncludeIntroVideoData": true,
       "isIncludeThumbNailData": true,
     };
-    
+
     if (rxSearch.value.isNotEmpty) {
       query["search"] = rxSearch.value;
     }
