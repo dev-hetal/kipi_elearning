@@ -6,6 +6,8 @@ A reusable Flutter package for e-learning course management, enrollment, and con
 
 - **Course Management**: Browse, search, and filter courses
 - **Course Enrollment**: Enroll in courses using wallet credits
+- **Wallet Integration**: Check wallet balance, buy credits, and handle insufficient funds
+- **Subscription Support**: Check subscription plans and free course eligibility
 - **Course Content**: View course materials, videos, PDFs, and documents
 - **Course Index**: Hierarchical course content structure with chapters and topics
 - **Index Merging**: Teachers can merge course indexes from different sources
@@ -13,6 +15,8 @@ A reusable Flutter package for e-learning course management, enrollment, and con
 - **Multi-language Support**: English and Gujarati translations included
 - **Dependency Injection**: Clean architecture with provider interfaces
 - **GetX Integration**: Built with GetX for state management and routing
+- **Role-Based Access**: Different course views for teachers, students, and admins
+- **App Type Support**: Works with school, institute, student, and trainer apps
 
 ## Development Setup
 
@@ -58,9 +62,11 @@ void main() async {
   final userProvider = MyUserProvider();
   final indexProvider = MyIndexProvider();
   final entityProvider = MyEntityProvider();
-  final subscriptionProvider = MySubscriptionProvider();
-  final walletProvider = MyWalletProvider();
   final navigationProvider = MyNavigationProvider();
+
+  // Optional providers for wallet and subscription features
+  final walletProvider = MyWalletProvider();
+  final subscriptionProvider = MySubscriptionProvider();
 
   // Initialize the package
   KipiElearning.initialize(
@@ -68,13 +74,15 @@ void main() async {
     userProvider: userProvider,
     indexProvider: indexProvider,
     entityProvider: entityProvider,
-    subscriptionProvider: subscriptionProvider,
-    walletProvider: walletProvider,
     navigationProvider: navigationProvider,
+    walletProvider: walletProvider, // Optional
+    subscriptionProvider: subscriptionProvider, // Optional
     theme: MyElearningTheme(),
     translator: myTranslator,
     onSuccessMessage: (message) => showSuccess(message),
     onErrorMessage: (message) => showError(message),
+    showLoader: () => showLoaderOverlay(),
+    hideLoader: () => hideLoaderOverlay(),
   );
 
   runApp(MyApp());
@@ -84,6 +92,8 @@ void main() async {
 ### 2. Implement Required Providers
 
 You need to implement the following provider interfaces:
+
+#### Required Providers
 
 #### CourseRepository
 ```dart
@@ -126,9 +136,74 @@ class MyUserProvider implements UserProvider {
 Similarly implement:
 - `IndexProvider` - For course index/chapter operations
 - `EntityProvider` - For entity hierarchy data
-- `SubscriptionProvider` - For subscription information
-- `WalletProvider` - For wallet integration
 - `NavigationProvider` - For navigation functionality
+
+#### Optional Providers
+
+#### WalletProvider
+```dart
+class MyWalletProvider implements WalletProvider {
+  @override
+  Future<bool> enrollCourseWithWallet({
+    required String courseId,
+    required Map<String, dynamic> body,
+  }) {
+    // Implement wallet enrollment logic
+  }
+
+  @override
+  Future<num> getWalletBalance() {
+    // Return user's wallet balance
+  }
+
+  @override
+  bool hasSufficientBalance({
+    required num coursePrice,
+    required num currentBalance,
+  }) {
+    return currentBalance >= coursePrice;
+  }
+
+  @override
+  void navigateToWallet() {
+    // Navigate to wallet screen
+  }
+
+  @override
+  Future<bool> createWalletTransaction({
+    required Map<String, dynamic> body,
+  }) {
+    // Create wallet transaction
+  }
+}
+```
+
+#### SubscriptionProvider
+```dart
+class MySubscriptionProvider implements SubscriptionProvider {
+  @override
+  Future<List<dynamic>> getInstPlan() {
+    // Fetch institute subscription plans
+  }
+
+  @override
+  bool hasActiveSubscription() {
+    // Check if institute has active subscription
+  }
+
+  @override
+  String? getSubscriptionExpiry() {
+    // Return subscription expiry date
+  }
+
+  @override
+  bool isCourseIncludedInSubscription({
+    required String courseId,
+  }) {
+    // Check if course is included in subscription
+  }
+}
+```
 
 ### 3. Add Package Routes
 
