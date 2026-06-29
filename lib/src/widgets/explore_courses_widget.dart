@@ -9,9 +9,13 @@ class ExploreCoursesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<ExploreCoursesController>();
-
     return Obx(() {
+      if (!Get.isRegistered<ExploreCoursesController>()) {
+        ExploreCoursesBinding().dependencies();
+      }
+
+      final controller = Get.find<ExploreCoursesController>();
+
       if (controller.rxIsLoading.value) {
         return const Center(child: CircularProgressIndicator());
       }
